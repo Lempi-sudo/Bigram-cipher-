@@ -137,11 +137,14 @@ namespace laba1
             string inputtext = ReadTextInFile.readtext(filename);
             string cryptogram = new string("");
             string buffer = new string("");
+            int firstlette=0;
+            bool endletter = false;
             for (int i = 0; i < inputtext.Length; i++)
             {
                 if (this.Isletter(inputtext[i]) )//буква или была буква
                 {
-                    int firstlette = i;
+                    endletter = true;
+                    firstlette = i;
                     for (int j = i + 1; j < inputtext.Length; j++, i++)
                     {
                         if (this.Isletter(inputtext[j]))
@@ -154,6 +157,7 @@ namespace laba1
                             cryptogram += buffer;
                             cryptogram += this.table[horizontalIndex, verticalIndex][1];
                             buffer = null;
+                            endletter = false;
                             i = j;
                             break;
 
@@ -173,7 +177,13 @@ namespace laba1
                     WriteTextInFile.writetext("cryptogram.txt", cryptogram);
                     cryptogram = null;
                 }
+            }
+               
             
+            if (endletter)
+            {
+                cryptogram +=inputtext[firstlette];
+                cryptogram += buffer;
             }
             WriteTextInFile.writetext("cryptogram.txt", cryptogram);
         }
@@ -238,11 +248,14 @@ namespace laba1
             string ciphertext = ReadTextInFile.readtext(filename);
             string text = new string("");
             string buffer = new string("");
+            int firstlette = 0;
+            bool endletter = false;
             for (int i = 0; i < ciphertext.Length; i++)
             {
                 if (this.Isletter(ciphertext[i]))//буква или была буква
                 {
-                    int firstlette = i;
+                    endletter = true;
+                    firstlette = i;
                     for (int j = i + 1; j < ciphertext.Length; j++, i++)
                     {
                         if (this.Isletter(ciphertext[j]))
@@ -279,6 +292,11 @@ namespace laba1
                     text = null;
                 }
 
+            }
+            if (endletter)
+            {
+                text += ciphertext[firstlette];
+                text += buffer;
             }
             WriteTextInFile.writetext("OriginalText.txt", text);
         }
