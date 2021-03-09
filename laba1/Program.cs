@@ -92,45 +92,51 @@ namespace laba1
 
         private int NumberLetter(char c)
         {
-            switch (c)
-            {
-                case 'a':return 0;
-                case 'b': return 1;
-                case 'c': return 2;
-                case 'd': return 3;
-                case 'e': return 4;
-                case 'f': return 5;
-                case 'g': return 6;
-                case 'h': return 7;
-                case 'i': return 8;
-                case 'j': return 9;
-                case 'k': return 10;
-                case 'l': return 11;
-                case 'm': return 12;
-                case 'n': return 13;
-                case 'o':return  14;
-                case 'p': return 15;
-                case 'q': return 16;
-                case 'r': return 17;
-                case 's': return 18;
-                case 't': return 19;
-                case 'u': return 20;
-                case 'v': return 21;
-                case 'w': return 22;
-                case 'x': return 23;
-                case 'y': return 24;
-                case 'z': return 25;
-                default: return -1;
-            }
+            int code = c;//приведения типа из char в int
+            return code-97;//97 это смещение буквы 'a' в кодировке ASII
         }
-                   
+
+        //private int NumberLetter(char c)
+        //{
+        //    switch (c)
+        //    {
+        //        case 'a':return 0;
+        //        case 'b': return 1;
+        //        case 'c': return 2;
+        //        case 'd': return 3;
+        //        case 'e': return 4;
+        //        case 'f': return 5;
+        //        case 'g': return 6;
+        //        case 'h': return 7;
+        //        case 'i': return 8;
+        //        case 'j': return 9;
+        //        case 'k': return 10;
+        //        case 'l': return 11;
+        //        case 'm': return 12;
+        //        case 'n': return 13;
+        //        case 'o':return  14;
+        //        case 'p': return 15;
+        //        case 'q': return 16;
+        //        case 'r': return 17;
+        //        case 's': return 18;
+        //        case 't': return 19;
+        //        case 'u': return 20;
+        //        case 'v': return 21;
+        //        case 'w': return 22;
+        //        case 'x': return 23;
+        //        case 'y': return 24;
+        //        case 'z': return 25;
+        //        default: return -1;
+        //    }
+        //}
+
         public void encryption(string filename)
         {
             string inputtext = ReadTextInFile.readtext(filename);
             string cryptogram = new string("");
-            for (int i =0; i<inputtext.Length;i++)
+            for (int i = 0; i < inputtext.Length; i++)
             {
-                if(this.Isletter(inputtext[i]))//буква
+                if (this.Isletter(inputtext[i]))//буква
                 {
                     if (this.Isletter(inputtext[i + 1])) //и вторая тоже буква то обращаемя к таблице подстановок 
                     {
@@ -152,10 +158,17 @@ namespace laba1
                 {
                     cryptogram += inputtext[i];
                 }
+                if(cryptogram.Length>10000)
+                {
+                    WriteTextInFile.writetext("cryptogram.txt", cryptogram);
+                    cryptogram = null;
+                }
             }
 
             WriteTextInFile.writetext("cryptogram.txt", cryptogram);
         }
+
+
 
         private List<int> coordinatesbigram(string bigram)
         {
@@ -243,6 +256,11 @@ namespace laba1
                 {
                     text += ciphertext[i];
                 }
+                if (text.Length > 10000)
+                {
+                    WriteTextInFile.writetext("OriginalText.txt", text);
+                    text = null;
+                }
             }
 
             WriteTextInFile.writetext("OriginalText.txt", text);
@@ -264,20 +282,23 @@ namespace laba1
     {
         static void Main(string[] args)
         {
-
+      
             string[,] tablesubstitution = ReadTableSubstitution.readtable("KeyTable.txt");
-            
             BigramCipher cipher = new BigramCipher(tablesubstitution);
-
+            Console.WriteLine("Encryption");
             cipher.encryption("InputText.txt");
-            
+            Console.WriteLine("Decipher");
             cipher.decryption("cryptogram.txt");
 
             Console.WriteLine();
-
         }
     }
 }
+
+
+            
+            
+         
 
 
 
