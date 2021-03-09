@@ -130,44 +130,53 @@ namespace laba1
         //    }
         //}
 
+    
+
         public void encryption(string filename)
         {
             string inputtext = ReadTextInFile.readtext(filename);
             string cryptogram = new string("");
+            string buffer = new string("");
             for (int i = 0; i < inputtext.Length; i++)
             {
-                if (this.Isletter(inputtext[i]))//буква
+                if (this.Isletter(inputtext[i]) )//буква или была буква
                 {
-                    if (this.Isletter(inputtext[i + 1])) //и вторая тоже буква то обращаемя к таблице подстановок 
+                    int firstlette = i;
+                    for (int j = i + 1; j < inputtext.Length; j++, i++)
                     {
-                        int horizontalIndex = this.NumberLetter(inputtext[i]);
-                        int verticalIndex = this.NumberLetter(inputtext[i + 1]);
+                        if (this.Isletter(inputtext[j]))
+                        {
+                            int secondlette = j;
+                            int horizontalIndex = this.NumberLetter(inputtext[firstlette]);
+                            int verticalIndex = this.NumberLetter(inputtext[secondlette]);
 
-                        cryptogram += this.table[horizontalIndex, verticalIndex];
+                            cryptogram += this.table[horizontalIndex, verticalIndex][0];
+                            cryptogram += buffer;
+                            cryptogram += this.table[horizontalIndex, verticalIndex][1];
+                            buffer = null;
+                            i = j;
+                            break;
 
-                        i++;
-                    }
-                    else // вторая не буква
-                    {
-                        cryptogram += inputtext[i];
-                        i++;
-                        cryptogram += inputtext[i];
+                        }
+                        else
+                        {
+                            buffer += inputtext[j];
+                        }
                     }
                 }
-                else //не буква
+                else
                 {
                     cryptogram += inputtext[i];
                 }
-                if(cryptogram.Length>10000)
+                if (cryptogram.Length > 10000)
                 {
                     WriteTextInFile.writetext("cryptogram.txt", cryptogram);
                     cryptogram = null;
                 }
+            
             }
-
             WriteTextInFile.writetext("cryptogram.txt", cryptogram);
         }
-
 
 
         private List<int> coordinatesbigram(string bigram)
@@ -222,37 +231,45 @@ namespace laba1
                 default: return ' ';
             }
         }
-            
+           
+
         public void decryption(string filename)
         {
             string ciphertext = ReadTextInFile.readtext(filename);
             string text = new string("");
+            string buffer = new string("");
             for (int i = 0; i < ciphertext.Length; i++)
             {
-                if (this.Isletter(ciphertext[i]))//буква
+                if (this.Isletter(ciphertext[i]))//буква или была буква
                 {
-                    if (this.Isletter(ciphertext[i + 1])) //и вторая тоже буква то обращаемя к таблице подстановок 
+                    int firstlette = i;
+                    for (int j = i + 1; j < ciphertext.Length; j++, i++)
                     {
-                        string bigram = new string("");
-                        bigram += ciphertext[i];
-                        bigram += ciphertext[i + 1];
+                        if (this.Isletter(ciphertext[j]))
+                        {
+                            int secondlette = j;
+                            string bigram = new string("");
+                            bigram += ciphertext[firstlette];
+                            bigram += ciphertext[secondlette];
 
-                        List<int> coord = coordinatesbigram(bigram);
+                            List<int> coord = coordinatesbigram(bigram);
 
-                        text += LetterFromNumber(coord[0]);
-                        text += LetterFromNumber(coord[1]);
+                            text += LetterFromNumber(coord[0]);
+                            text += buffer;
+                            text += LetterFromNumber(coord[1]);
 
-                        i++;
-                    }
-                    else // вторая не буква
-                    {
-                        text += ciphertext[i];
+                            buffer = null;
+                            i = j;
+                            break;
 
-                        i++;
-                        text += ciphertext[i];
+                        }
+                        else
+                        {
+                            buffer += ciphertext[j];
+                        }
                     }
                 }
-                else //не буква
+                else
                 {
                     text += ciphertext[i];
                 }
@@ -261,24 +278,38 @@ namespace laba1
                     WriteTextInFile.writetext("OriginalText.txt", text);
                     text = null;
                 }
-            }
 
+            }
             WriteTextInFile.writetext("OriginalText.txt", text);
         }
-
     }
 
 
 
-
-
+                         
 
 
 
    
 
 
-    class Program
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Program
     {
         static void Main(string[] args)
         {
@@ -287,6 +318,7 @@ namespace laba1
             BigramCipher cipher = new BigramCipher(tablesubstitution);
             Console.WriteLine("Encryption");
             cipher.encryption("InputText.txt");
+            
             Console.WriteLine("Decipher");
             cipher.decryption("cryptogram.txt");
 
