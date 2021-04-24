@@ -303,6 +303,23 @@ namespace laba1
     }
 
 
+class Program
+    {
+        static void Main(string[] args)
+        {
+      
+            string[,] tablesubstitution = ReadTableSubstitution.readtable("KeyTable.txt");
+            BigramCipher cipher = new BigramCipher(tablesubstitution);
+            Console.WriteLine("Encryption");
+            cipher.encryption("InputText.txt");
+            
+            Console.WriteLine("Decipher");
+            cipher.decryption("cryptogram.txt");
+
+            Console.WriteLine();
+        }
+    }
+}
 
                          
 
@@ -327,23 +344,6 @@ namespace laba1
 
 
 
-class Program
-    {
-        static void Main(string[] args)
-        {
-      
-            string[,] tablesubstitution = ReadTableSubstitution.readtable("KeyTable.txt");
-            BigramCipher cipher = new BigramCipher(tablesubstitution);
-            Console.WriteLine("Encryption");
-            cipher.encryption("InputText.txt");
-            
-            Console.WriteLine("Decipher");
-            cipher.decryption("cryptogram.txt");
-
-            Console.WriteLine();
-        }
-    }
-}
 
 
             
